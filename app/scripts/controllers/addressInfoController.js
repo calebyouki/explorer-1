@@ -1,39 +1,37 @@
-angular.module('ethExplorer')
-    .controller('addressInfoCtrl', function ($rootScope, $scope, $location, $routeParams, $q) {
-
+angular
+  .module("ethExplorer")
+  .controller(
+    "addressInfoCtrl",
+    function ($rootScope, $scope, $location, $routeParams, $q) {
       var web3 = $rootScope.web3;
-	
-      $scope.init=function(){
 
-        $scope.addressId=$routeParams.addressId;
+      $scope.init = function () {
+        $scope.addressId = $routeParams.addressId;
 
-        if($scope.addressId!==undefined) {
-          getAddressInfos().then(function(result){
+        if ($scope.addressId !== undefined) {
+          getAddressInfos().then(function (result) {
             $scope.balance = result.balance;
             $scope.balanceInEther = result.balanceInEther;
           });
         }
 
-
-        function getAddressInfos(){
+        function getAddressInfos() {
           var deferred = $q.defer();
 
-          web3.eth.getBalance($scope.addressId,function(error, result) {
-            if(!error) {
-                deferred.resolve({
-                  balance: result,
-                  balanceInEther: web3.fromWei(result, 'ether')
-                });
+          web3.eth.getBalance($scope.addressId, function (error, result) {
+            if (!error) {
+              deferred.resolve({
+                balance: result,
+                balanceInEther: Web3.utils.fromWei(result, "ether"),
+              });
             } else {
-                deferred.reject(error);
+              deferred.reject(error);
             }
           });
           return deferred.promise;
         }
-
-
       };
-      
-      $scope.init();
 
-    });
+      $scope.init();
+    }
+  );
